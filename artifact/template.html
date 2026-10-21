@@ -1,0 +1,646 @@
+<title>Mordet på Värdshuset Ripan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Literata:opsz,wght@7..72,400;7..72,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: en natt i snöstormen. Akten och de misstänkta till vänster, förhörsprotokollet till höger; mässing (mordvapnet) som enda accent. */
+:root {
+  --night: #12171c;
+  --wall: #1a2128;
+  --timber: #232c34;
+  --rule: #34404b;
+  --snow: #e9ecee;
+  --frost: #9aa7b1;
+  --brass: #c9a35b;
+  --brass-dim: #8a7243;
+  --ember: #c4553f;
+  --pine: #5f9a7d;
+  --display: "Cormorant Garamond", "Garamond", "Times New Roman", serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--snow);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+
+.wrap { max-width: 1180px; margin: 0 auto; }
+
+/* ---------- Header ---------- */
+header.masthead {
+  padding-block: 40px 28px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  gap: 10px;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1;
+  margin: 0;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+h1 em { font-style: italic; font-weight: 500; color: var(--brass); }
+.lede { max-width: 62ch; color: var(--frost); margin: 4px 0 0; }
+
+/* ---------- Grid ---------- */
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 32px;
+  padding-top: 28px;
+}
+@media (max-width: 860px) { .board { grid-template-columns: minmax(0, 1fr); } }
+.col { display: grid; gap: 28px; align-content: start; min-width: 0; }
+
+h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.7rem;
+  margin: 0 0 12px;
+  line-height: 1.1;
+}
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--frost);
+  margin: 0 0 6px;
+}
+
+/* ---------- Akten ---------- */
+.facts { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.facts li { padding-left: 18px; position: relative; font-size: 0.95rem; }
+.facts li::before {
+  content: ""; position: absolute; left: 2px; top: 0.65em;
+  width: 6px; height: 6px; background: var(--brass-dim); transform: rotate(45deg);
+}
+
+.timeline {
+  margin: 16px 0 0; padding: 0; list-style: none;
+  font-family: var(--mono); font-size: 13px;
+  border-left: 1px solid var(--rule);
+}
+.timeline li {
+  display: grid; grid-template-columns: 6ch 1fr; gap: 12px;
+  padding: 5px 0 5px 14px; position: relative;
+  font-variant-numeric: tabular-nums;
+}
+.timeline li::before {
+  content: ""; position: absolute; left: -4px; top: 12px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--rule);
+}
+.timeline li.dark::before { background: var(--brass); }
+.timeline time { color: var(--brass); }
+.timeline span { color: var(--frost); }
+
+/* ---------- Misstänkta ---------- */
+.suspects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.suspect {
+  display: grid; gap: 4px; align-content: start;
+  text-align: left; cursor: pointer;
+  background: var(--wall); color: var(--snow);
+  border: 1px solid var(--rule); border-radius: 4px;
+  padding: 12px 12px 14px; font: inherit;
+  transition: border-color .15s, background .15s;
+}
+.suspect:hover { border-color: var(--brass-dim); }
+.suspect:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.suspect[aria-pressed="true"] { border-color: var(--brass); background: var(--timber); }
+.suspect .initials {
+  font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1;
+  color: var(--brass);
+}
+.suspect .name { font-weight: 600; font-size: 0.98rem; }
+.suspect .role { font-family: var(--mono); font-size: 11px; color: var(--frost); letter-spacing: 0.04em; }
+.suspect .blurb { font-size: 0.85rem; color: var(--frost); line-height: 1.4; }
+.suspect .count { font-family: var(--mono); font-size: 11px; color: var(--brass-dim); }
+
+/* ---------- Anteckningar ---------- */
+textarea#notes {
+  width: 100%; min-height: 120px; resize: vertical;
+  background: var(--wall); color: var(--snow);
+  border: 1px solid var(--rule); border-radius: 4px;
+  padding: 10px 12px; font: 14px/1.5 var(--mono);
+}
+textarea#notes:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+
+/* ---------- Förhörsrum ---------- */
+.room {
+  background: var(--wall);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 560px;
+  max-height: 78vh;
+}
+@media (max-width: 860px) { .room { max-height: none; min-height: 460px; } }
+.room-head {
+  padding: 14px 18px; border-bottom: 1px dashed var(--rule);
+  display: grid; gap: 2px;
+}
+.room-head .protocol { font-family: var(--mono); font-size: 12px; color: var(--frost); }
+.room-head h2 { margin: 0; font-size: 1.5rem; }
+
+.log { overflow-y: auto; padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.entry { display: grid; grid-template-columns: 9ch minmax(0, 1fr); gap: 12px; }
+.entry .who {
+  font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+  padding-top: 3px; color: var(--frost);
+}
+.entry.q .who { color: var(--brass); }
+.entry .said { white-space: pre-wrap; overflow-wrap: anywhere; }
+.entry.q .said { color: var(--frost); font-style: italic; }
+.entry.err .said { color: var(--ember); font-family: var(--mono); font-size: 13px; }
+.entry .said .act { color: var(--frost); font-style: italic; }
+.pending .said::after {
+  content: "▍"; color: var(--brass); margin-left: 2px;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .pending .said::after { animation: none; } }
+
+.empty-room { color: var(--frost); font-style: italic; max-width: 46ch; }
+.suggest { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.suggest button {
+  font: 13px var(--body); background: transparent; color: var(--snow);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; cursor: pointer;
+}
+.suggest button:hover { border-color: var(--brass-dim); }
+
+form#ask {
+  display: flex; gap: 8px; padding: 12px; border-top: 1px dashed var(--rule);
+}
+#question {
+  flex: 1; min-width: 0;
+  background: var(--night); color: var(--snow);
+  border: 1px solid var(--rule); border-radius: 4px;
+  padding: 10px 12px; font: 15px var(--body);
+}
+#question:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+
+button.primary, button.ghost, button.danger {
+  font: 600 14px var(--body); border-radius: 4px; padding: 10px 16px; cursor: pointer;
+  border: 1px solid transparent;
+}
+button.primary { background: var(--brass); color: var(--night); }
+button.ghost { background: transparent; color: var(--snow); border-color: var(--rule); }
+button.ghost:hover { border-color: var(--frost); }
+button.danger { background: var(--ember); color: var(--snow); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible { outline: 2px solid var(--snow); outline-offset: 2px; }
+
+.notice {
+  font-family: var(--mono); font-size: 13px; color: var(--frost);
+  border: 1px solid var(--rule); border-left: 3px solid var(--ember);
+  padding: 10px 12px; border-radius: 4px; background: var(--wall);
+}
+
+/* ---------- Anklagelse ---------- */
+.accuse { display: grid; gap: 12px; }
+.accuse-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pick {
+  font: 14px var(--body); background: transparent; color: var(--snow);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 8px 12px; cursor: pointer;
+}
+.pick[aria-pressed="true"] { border-color: var(--ember); color: var(--snow); background: var(--timber); }
+.confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.confirm p { margin: 0; flex-basis: 100%; }
+
+.verdict {
+  border: 1px solid var(--rule); border-radius: 4px; padding: 20px;
+  background: var(--wall); display: grid; gap: 10px;
+  animation: reveal .6s ease-out both;
+}
+.verdict.right { border-color: var(--pine); }
+.verdict.wrong { border-color: var(--ember); }
+.verdict .stamp {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+}
+.verdict.right .stamp { color: var(--pine); }
+.verdict.wrong .stamp { color: var(--ember); }
+.verdict h3 { font-family: var(--display); font-size: 1.9rem; margin: 0; line-height: 1.1; text-wrap: balance; }
+.verdict p { margin: 0; white-space: pre-wrap; max-width: 68ch; }
+@keyframes reveal { from { opacity: .3; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .verdict { animation: none; } }
+
+.footer-row { display: flex; justify-content: flex-end; }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">Polisärende · Rävfjället, Jämtland · natten mot lördag</div>
+    <h1>Mordet på <em>Värdshuset Ripan</em></h1>
+    <p class="lede">Snöstormen har stängt in alla på värdshuset. Värden Henrik Wallin ligger död i biblioteket. Du förhör de fyra misstänkta, en i taget. När du vet vem som gjorde det, gör du din anklagelse. Du får bara anklaga en gång.</p>
+  </header>
+
+  <div class="board">
+    <div class="col">
+      <section aria-labelledby="h-case">
+        <p class="section-label">Akten</p>
+        <h2 id="h-case">Det här vet alla i huset</h2>
+        <ul class="facts" id="facts"></ul>
+        <ol class="timeline" aria-label="Tidslinje">
+          <li><time>19.00</time><span>Middag. Henrik och Elsa grälar högljutt.</span></li>
+          <li class="dark"><time>23.40</time><span>Strömmen går i hela huset.</span></li>
+          <li><time>~00.00</time><span>Reservgeneratorn startar, ljuset kommer tillbaka.</span></li>
+          <li class="dark"><time>06.30</time><span>Margareta hittar Henrik död i biblioteket.</span></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="h-suspects">
+        <p class="section-label">Välj vem du vill förhöra</p>
+        <h2 id="h-suspects">De misstänkta</h2>
+        <div class="suspects" id="suspects"></div>
+      </section>
+
+      <section aria-labelledby="h-notes">
+        <p class="section-label">Bara för dig</p>
+        <h2 id="h-notes">Anteckningar</h2>
+        <textarea id="notes" placeholder="Motsägelser, tider, saker att fråga om…"></textarea>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="room" aria-labelledby="room-title">
+        <div class="room-head">
+          <div class="protocol" id="protocol">Förhörsprotokoll · skrivrummet</div>
+          <h2 id="room-title">Förhörsrummet är tomt</h2>
+        </div>
+        <div class="log" id="log" aria-live="polite"></div>
+        <form id="ask" autocomplete="off">
+          <label for="question" class="section-label" hidden>Din fråga</label>
+          <input id="question" type="text" maxlength="600" placeholder="Välj en misstänkt först" disabled>
+          <button class="primary" id="ask-btn" type="submit" disabled>Fråga</button>
+        </form>
+      </section>
+
+      <div id="sample-notice" class="notice" hidden></div>
+
+      <section class="accuse" aria-labelledby="h-accuse">
+        <div>
+          <p class="section-label">När du är säker</p>
+          <h2 id="h-accuse">Anklagelse</h2>
+        </div>
+        <div id="accuse-area">
+          <div class="accuse-row" id="picks"></div>
+        </div>
+        <div id="confirm" class="confirm" hidden>
+          <p id="confirm-text"></p>
+          <button class="danger" id="confirm-yes" type="button">Ja, anklaga</button>
+          <button class="ghost" id="confirm-no" type="button">Avbryt</button>
+        </div>
+        <div id="verdict" hidden></div>
+        <div class="footer-row">
+          <button class="ghost" id="restart" type="button">Börja om fallet</button>
+        </div>
+        <div id="restart-confirm" class="confirm" hidden>
+          <p>Alla förhör, anteckningar och din anklagelse nollställs.</p>
+          <button class="danger" id="restart-yes" type="button">Börja om</button>
+          <button class="ghost" id="restart-no" type="button">Avbryt</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+// Fallet är kodat så att lösningen inte syns av misstag i källkoden.
+const CASE = JSON.parse(decodeURIComponent(escape(atob("__CASE_DATA__"))));
+const STORE_KEY = "ripan-v1";
+const MAX_TURNS = 30;
+
+const $ = (id) => document.getElementById(id);
+const state = load() || fresh();
+let sample = null;
+let busy = false;
+let controller = null;
+let picked = null;
+
+function fresh() {
+  return {
+    current: null,
+    chats: Object.fromEntries(CASE.suspects.map((s) => [s.id, []])),
+    notes: "",
+    accused: null,
+  };
+}
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    if (!s.chats || !CASE.suspects.every((x) => Array.isArray(s.chats[x.id]))) return null;
+    return s;
+  } catch { return null; }
+}
+function save() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch {}
+}
+
+const initials = (name) => name.replace(/^Doktor /, "").split(" ").map((p) => p[0]).join("");
+const suspectById = (id) => CASE.suspects.find((s) => s.id === id);
+
+function renderFacts() {
+  const ul = $("facts");
+  ul.innerHTML = "";
+  for (const f of CASE.facts) {
+    const li = document.createElement("li");
+    li.textContent = f;
+    ul.appendChild(li);
+  }
+}
+
+function renderSuspects() {
+  const box = $("suspects");
+  box.innerHTML = "";
+  for (const s of CASE.suspects) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "suspect";
+    b.setAttribute("aria-pressed", String(state.current === s.id));
+    const n = state.chats[s.id].filter((m) => m.role === "user").length;
+    b.innerHTML = `<span class="initials"></span><span class="name"></span><span class="role"></span><span class="blurb"></span><span class="count"></span>`;
+    b.querySelector(".initials").textContent = initials(s.name);
+    b.querySelector(".name").textContent = s.name;
+    b.querySelector(".role").textContent = s.title;
+    b.querySelector(".blurb").textContent = s.blurb;
+    b.querySelector(".count").textContent = n ? `${n} ${n === 1 ? "fråga" : "frågor"} ställda` : "Inte förhörd";
+    b.addEventListener("click", () => {
+      if (busy) return;
+      state.current = s.id;
+      save();
+      renderSuspects();
+      renderRoom();
+      $("question").focus();
+    });
+    box.appendChild(b);
+  }
+}
+
+function addEntry(kind, who, text) {
+  const div = document.createElement("div");
+  div.className = `entry ${kind}`;
+  div.innerHTML = `<div class="who"></div><div class="said"></div>`;
+  div.querySelector(".who").textContent = who;
+  setSaid(div.querySelector(".said"), text);
+  $("log").appendChild(div);
+  return div;
+}
+
+// Visar *handlingar* i kursiv stil, resten som vanlig text.
+function setSaid(el, text) {
+  el.textContent = "";
+  const parts = String(text).split(/(\*[^*\n]+\*)/g);
+  for (const p of parts) {
+    if (/^\*[^*\n]+\*$/.test(p)) {
+      const span = document.createElement("span");
+      span.className = "act";
+      span.textContent = p.slice(1, -1);
+      el.appendChild(span);
+    } else if (p) {
+      el.appendChild(document.createTextNode(p));
+    }
+  }
+}
+
+const OPENERS = [
+  "Var var du mellan elva och halv ett i natt?",
+  "Hur kände du Henrik?",
+  "Vad gjorde du när strömmen gick?",
+];
+
+function renderRoom() {
+  const s = suspectById(state.current);
+  const log = $("log");
+  log.innerHTML = "";
+  const canAsk = !!s && !busy && !state.accused && sample !== null;
+  $("question").disabled = !canAsk;
+  $("ask-btn").disabled = !canAsk;
+
+  if (!s) {
+    $("room-title").textContent = "Förhörsrummet är tomt";
+    $("protocol").textContent = "Förhörsprotokoll · skrivrummet";
+    $("question").placeholder = "Välj en misstänkt först";
+    const p = document.createElement("p");
+    p.className = "empty-room";
+    p.textContent = "Välj en av de misstänkta till vänster för att kalla in hen till skrivrummet.";
+    log.appendChild(p);
+    return;
+  }
+
+  $("room-title").textContent = s.name;
+  $("protocol").textContent = `Förhörsprotokoll · ${s.title} · skrivrummet, Värdshuset Ripan`;
+  $("question").placeholder = state.accused ? "Fallet är avslutat" : `Fråga ${s.name.split(" ").slice(-2)[0]}…`;
+
+  const chat = state.chats[s.id];
+  if (chat.length === 0) {
+    const p = document.createElement("p");
+    p.className = "empty-room";
+    p.textContent = `${s.name} sätter sig mittemot dig vid skrivbordet och väntar.`;
+    log.appendChild(p);
+    if (canAsk) {
+      const row = document.createElement("div");
+      row.className = "suggest";
+      for (const q of OPENERS) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = q;
+        b.addEventListener("click", () => ask(q));
+        row.appendChild(b);
+      }
+      log.appendChild(row);
+    }
+  }
+  for (const m of chat) {
+    if (m.role === "user") addEntry("q", "Du", m.content);
+    else addEntry("a", initials(s.name), m.content);
+  }
+  log.scrollTop = log.scrollHeight;
+}
+
+function buildInput(s, chat) {
+  const rules = `${s.prompt}
+
+Du befinner dig nu i förhöret. Jag är förhörsledaren och kommer att ställa frågor till dig. Svara ENDAST med din egen replik i rollen, utan rubrik, namn eller förklaringar utanför rollen.`;
+  const recent = chat.slice(-MAX_TURNS * 2);
+  if (recent.length && recent[0].role === "assistant") recent.shift();
+  return [{ role: "user", content: rules }, ...recent];
+}
+
+async function ask(text) {
+  const s = suspectById(state.current);
+  text = (text || "").trim();
+  if (!s || !text || busy || state.accused) return;
+  if (!sample) { showSampleNotice(); return; }
+
+  const chat = state.chats[s.id];
+  chat.push({ role: "user", content: text });
+  save();
+  $("question").value = "";
+  busy = true;
+  renderSuspects();
+  renderRoom();
+
+  const entry = addEntry("a pending", initials(s.name), "");
+  const said = entry.querySelector(".said");
+  const log = $("log");
+  controller = new AbortController();
+  try {
+    const { text: reply } = await sample(buildInput(s, chat), {
+      cache: false,
+      signal: controller.signal,
+      onText: ({ text }) => { setSaid(said, text); log.scrollTop = log.scrollHeight; },
+    });
+    chat.push({ role: "assistant", content: (reply || "").trim() || "*tiger*" });
+  } catch (err) {
+    chat.pop(); // frågan räknas inte om den inte besvarades
+    $("question").value = text;
+    const msg = {
+      not_granted: "Du behöver tillåta att sidan frågar Claude för att kunna förhöra någon.",
+      rate_limited: "För många frågor just nu. Vänta en stund och försök igen.",
+    }[err && err.code] || `Förhöret avbröts: ${(err && err.message) || "okänt fel"}. Försök igen.`;
+    busy = false;
+    renderRoom();
+    addEntry("err", "Fel", msg);
+    renderSuspects();
+    save();
+    return;
+  } finally {
+    controller = null;
+  }
+  busy = false;
+  save();
+  renderSuspects();
+  renderRoom();
+  $("question").focus();
+}
+
+$("ask").addEventListener("submit", (e) => {
+  e.preventDefault();
+  ask($("question").value);
+});
+
+// ---------- Anklagelse ----------
+function renderAccuse() {
+  const picks = $("picks");
+  picks.innerHTML = "";
+  $("accuse-area").hidden = !!state.accused;
+  for (const s of CASE.suspects) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "pick";
+    b.textContent = s.name;
+    b.setAttribute("aria-pressed", String(picked === s.id));
+    b.addEventListener("click", () => {
+      picked = s.id;
+      $("confirm-text").textContent = `Du anklagar ${s.name} för mordet på Henrik Wallin. Det går inte att ångra.`;
+      $("confirm").hidden = false;
+      renderAccuse();
+    });
+    picks.appendChild(b);
+  }
+  if (state.accused) {
+    $("confirm").hidden = true;
+    renderVerdict();
+  } else {
+    $("verdict").hidden = true;
+  }
+}
+
+function renderVerdict() {
+  const accused = suspectById(state.accused);
+  const culprit = suspectById(CASE.culpritId);
+  const right = accused.id === culprit.id;
+  const v = $("verdict");
+  v.hidden = false;
+  v.className = `verdict ${right ? "right" : "wrong"}`;
+  v.innerHTML = `<div class="stamp"></div><h3></h3><p></p>`;
+  v.querySelector(".stamp").textContent = right ? "Fallet löst" : "Fel person anklagad";
+  v.querySelector("h3").textContent = right
+    ? `Rätt. ${culprit.name} mördade Henrik Wallin.`
+    : `${accused.name} var oskyldig. Mördaren var ${culprit.name}.`;
+  v.querySelector("p").textContent = CASE.solution;
+}
+
+$("confirm-yes").addEventListener("click", () => {
+  if (!picked) return;
+  if (controller) controller.abort();
+  state.accused = picked;
+  picked = null;
+  save();
+  renderAccuse();
+  renderRoom();
+  $("verdict").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+$("confirm-no").addEventListener("click", () => {
+  picked = null;
+  $("confirm").hidden = true;
+  renderAccuse();
+});
+
+$("restart").addEventListener("click", () => { $("restart-confirm").hidden = false; });
+$("restart-no").addEventListener("click", () => { $("restart-confirm").hidden = true; });
+$("restart-yes").addEventListener("click", () => {
+  if (controller) controller.abort();
+  Object.assign(state, fresh());
+  picked = null;
+  busy = false;
+  $("notes").value = "";
+  $("restart-confirm").hidden = true;
+  $("confirm").hidden = true;
+  save();
+  renderAll();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+$("notes").addEventListener("input", (e) => { state.notes = e.target.value; save(); });
+
+function showSampleNotice() {
+  const n = $("sample-notice");
+  n.hidden = false;
+  n.textContent = "Förhören behöver Claude. Öppna sidan i Claude-appen eller på claude.ai, inloggad, för att kunna ställa frågor.";
+}
+
+function renderAll() {
+  $("notes").value = state.notes || "";
+  renderFacts();
+  renderSuspects();
+  renderRoom();
+  renderAccuse();
+}
+
+renderAll();
+
+(async () => {
+  try {
+    sample = window.claude ? await window.claude.use("sample") : null;
+  } catch { sample = null; }
+  if (!sample) showSampleNotice();
+  renderRoom();
+})();
+</script>

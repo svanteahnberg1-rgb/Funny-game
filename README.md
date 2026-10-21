@@ -21,3 +21,11 @@ npm start
 - `public/`: Frontend i vanlig HTML, CSS och JavaScript.
 
 Mördaren och lösningen skickas aldrig till webbläsaren förrän du har gjort din anklagelse.
+
+## Spela i Claude (utan server)
+
+`artifact/ripan.html` är en fristående version av spelet som körs som en Claude-artifact. Där spelas de misstänkta av Claude via ditt eget Claude-konto, så du behöver ingen API-nyckel. Sidan byggs från `case.js` med:
+
+```bash
+node artifact/build.js
+```
