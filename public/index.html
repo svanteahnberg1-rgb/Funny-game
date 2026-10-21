@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mordet på Värdshuset Ripan</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Mordet på Värdshuset Ripan</h1>
+    <p class="tagline">Ett deckarspel i snöstormen på Rävfjället</p>
+  </header>
+
+  <main>
+    <section id="casefile" class="panel">
+      <h2>Akten</h2>
+      <pre id="intro">Laddar fallet…</pre>
+      <button id="new-game" class="secondary">Nytt spel</button>
+    </section>
+
+    <section id="suspects" class="panel">
+      <h2>De misstänkta</h2>
+      <p class="hint">Välj vem du vill förhöra.</p>
+      <ul id="suspect-list"></ul>
+    </section>
+
+    <section id="interrogation" class="panel">
+      <h2 id="chat-title">Förhörsrummet</h2>
+      <div id="chat" aria-live="polite">
+        <p class="empty">Välj en misstänkt för att börja förhöret.</p>
+      </div>
+      <form id="ask-form">
+        <input id="question" type="text" maxlength="1000" autocomplete="off"
+               placeholder="Ställ en fråga…" disabled>
+        <button id="ask" type="submit" disabled>Fråga</button>
+      </form>
+    </section>
+
+    <section id="accusation" class="panel">
+      <h2>Anklagelse</h2>
+      <p class="hint">Du får bara anklaga en gång. Välj noga.</p>
+      <select id="accuse-select"></select>
+      <button id="accuse" class="danger">Anklaga</button>
+      <div id="verdict" hidden></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
